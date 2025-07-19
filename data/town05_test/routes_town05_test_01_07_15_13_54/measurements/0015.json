@@ -1,0 +1,16 @@
+{
+    "x": 90.22491800062956,
+    "y": -255.65641819513468,
+    "theta": 4.192549705505371,
+    "speed": 12.356527474398552,
+    "x_command_far": 49.09941284845903,
+    "y_command_far": -275.42697181094877,
+    "command_far": 4,
+    "x_command_near": 87.73472177690314,
+    "y_command_near": -259.17611729661166,
+    "command_near": 4,
+    "should_brake": false,
+    "x_target": 49.09941284845903,
+    "y_target": -275.42697181094877,
+    "target_command": 4
+}
