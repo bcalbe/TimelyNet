@@ -15,10 +15,7 @@ from TCP.config import GlobalConfig
 import json
 import copy
 
-from TimelyNet.latency_collection import get_acc
 from TimelyNet.INN import load_model,hyperparameter_generation
-from TimelyNet.DNN import hyperparameter_generation_DNN, Latency_predictor_MLP
-from TimelyNet.model_switch import baseline_switch,Latency_dataset_E2E,Latency_dataset_DNN
 from TimelyNet.Lookup import Lookuptable
 from time import time
 import os
@@ -34,7 +31,7 @@ def load_TCP(config = None, resume_path = None):
     model = TCP(config,backbone_name = "Superres")
     #-----------------------------------------------------------------------------------
     #loading a model trained on multi gpu to single gpu will cause key mistach error
-    #Specificall, the state_dict of the ckpt model will have "model" prefix in the keys
+    #Specifically, the state_dict of the ckpt model will have "model" prefix in the keys
     #-----------------------------------------------------------------------------------
     if resume_path is not None:
         init = torch.load(resume_path,map_location="cuda:0")
@@ -48,9 +45,6 @@ def load_TCP(config = None, resume_path = None):
         param.requires_grad = False
     return model
 
-
-   
-    
 
 def fusion_INN_lookup(arch_zoo_INN, arch_zoo_lookup,model):
     arch_zoo = []
@@ -67,8 +61,6 @@ def fusion_INN_lookup(arch_zoo_INN, arch_zoo_lookup,model):
         else:
             arch_zoo.append(arch_zoo_lookup[i])
     return arch_zoo
-
-
 
 
 def run_model(model, data_loader,desired_latency=None):
@@ -101,7 +93,7 @@ def run_model(model, data_loader,desired_latency=None):
 def latency_test(data_loader=None, model=None, INN_model=None, lookup_table=None):
     arch_zoo = []
     #set the required latency
-    ddls = [45,55,65,75,85,95]
+    ddls = [40,50,60,70,80,90]
     for i in range(len(ddls)):
         d = ddls[i]
         
@@ -130,7 +122,7 @@ def control_quality_test(model, data_loader,arch_zoo):
         throttle_delta_list = []
         steer_delta_list = []
         brake_delta_list = []
-        
+
         # Calculate the control quality of the current subnet
         for batch in data_loader:
             front_img = batch['front_img'].to(device)
@@ -182,31 +174,20 @@ def control_quality_test(model, data_loader,arch_zoo):
     return 0
 
 if __name__=="__main__":
-
-
     #loading the model and dataset
-    lookup_table = Lookuptable()
     config = GlobalConfig()
     batch_size = 1
     
-    resume_path="./checkpoint/TCP_result/res50_ta_4wp_123+10ep.ckpt"   
-
+    resume_path="./checkpoint/TCP_model/res50_ta_4wp_123+10ep.ckpt"   
     model = load_TCP(config=config, resume_path=resume_path) 
     INN_model = load_model(72) 
+    lookup_table = Lookuptable()
 
 
     data_set = CARLA_Data(root=config.root_dir_all, data_folders=config.train_data, img_aug = config.img_aug)
     print(len(data_set))
-
-    
-
     data_loader = DataLoader(data_set, batch_size=batch_size, shuffle=False, num_workers=1)
-
-    #show_images(dataloader_train, title=["Front Image"])
 
     arch_zoo = latency_test(data_loader=data_loader, model=model, INN_model=INN_model, lookup_table=lookup_table)
 
     control_quality_test(model = model, data_loader=data_loader, arch_zoo=arch_zoo)
-
-
-    pass
