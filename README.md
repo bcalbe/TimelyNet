@@ -24,10 +24,6 @@ In this repository, we run latency tests and control quality tests on the Timely
    conda env create -f environment.yml
    conda activate TimelyNet
    ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
 
 ## Getting Started
 1. Download the model with supernet encoder from the link below and place it in the `checkpoint/TCP_model/` directory.
