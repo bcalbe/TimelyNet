@@ -1,7 +1,7 @@
 # TimelyNet
 
 TimelyNet is a real-time neural architecture adaptation approach that can be integrated into existing autonomous driving pipelines to meet dynamic latency requirements.
-This repository provides the inference code of TimelyNet implemented on top of the Trajectory Control Prediction (TCP) model[1]. 
+This repository provides the inference code of TimelyNet implemented on top of the Trajectory Control Prediction (TCP) model. 
 
 In this repository, we run latency tests and control quality tests on the TimelyNet. In latency test, we set different latency requirements from 40 ms to 90 ms, with a step of 10 ms. For each latency requirement, we predict the optimal architeture using the lookup table and invertible neural network (INN) model. We fuse the two predicted architectures as the final architecture. In control quality test, we use the predicted architecture to run the TCP model with predicted subnet architecture and evaluate the control quality of the model.
 
@@ -19,7 +19,12 @@ In this repository, we run latency tests and control quality tests on the Timely
    git clone https://github.com/your-repo/TimelyNet.git
    cd TimelyNet
    ```
-2. Install dependencies:
+2. Create conda environment:
+   ```bash
+   conda env create -f environment.yml
+   conda activate TimelyNet
+   ```
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
